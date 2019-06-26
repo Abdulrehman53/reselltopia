@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:reselltopia/HomeWidgets/categoriesList.dart';
 import 'package:reselltopia/HomeWidgets/slidebar.dart';
 import 'package:reselltopia/utils/main_grid_list.dart';
+import 'package:reselltopia/utils/main_page_grid.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -39,7 +39,53 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             ),
-            Padding(
+            Expanded(
+              child: Container(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SlideBar(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 180.0,
+                              child: CategoriesList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1),
+                      delegate: SliverChildListDelegate(
+                        [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: MainGridList(
+                              searchText: "",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            /*Padding(
               padding: const EdgeInsets.all(8.0),
               child: SlideBar(),
             ),
@@ -57,7 +103,7 @@ class _MainPageState extends State<MainPage> {
                   searchText: "",
                 ),
               ),
-            ),
+            ),*/
           ],
         ),
       ),
