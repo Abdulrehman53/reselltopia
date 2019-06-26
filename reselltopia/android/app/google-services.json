@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "67647405355",
+    "firebase_url": "https://reselltopia.firebaseio.com",
+    "project_id": "reselltopia",
+    "storage_bucket": "reselltopia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67647405355:android:49e62c7fa4b40693",
+        "android_client_info": {
+          "package_name": "com.aztech.reselltopia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67647405355-u6d82d6fv23slrplk7g7o6div0pdk74s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJjKlAhaEbPz6uV4bfm3kkxTAP3K0-8fw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67647405355-u6d82d6fv23slrplk7g7o6div0pdk74s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
