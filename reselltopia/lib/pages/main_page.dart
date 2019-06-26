@@ -4,6 +4,7 @@ import 'package:reselltopia/utils/main_grid_list.dart';
 import 'package:reselltopia/utils/main_page_grid.dart';
 
 class MainPage extends StatefulWidget {
+  String searchText = "";
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -23,6 +24,7 @@ class _MainPageState extends State<MainPage> {
                 child: TextField(
                   onChanged: (value) {
                     print(value);
+                    widget.searchText = value;
                     setState(() {});
                   },
                   decoration: InputDecoration(
@@ -66,15 +68,13 @@ class _MainPageState extends State<MainPage> {
                         ],
                       ),
                     ),
-                    SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1),
+                    SliverList(
                       delegate: SliverChildListDelegate(
                         [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: MainGridList(
-                              searchText: "",
+                              searchText: widget.searchText,
                             ),
                           ),
                         ],

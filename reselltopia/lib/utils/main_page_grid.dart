@@ -11,52 +11,54 @@ class CategoriesList extends StatefulWidget {
 
 class _CategoriesListState extends State<CategoriesList> {
   final fireStore = Firestore.instance;
+  List<CategoryModel> productList = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  void getData() async {
+    QuerySnapshot documents =
+        await fireStore.collection(CATEGORIES).getDocuments();
+    productList = [];
+    for (var message in documents.documents) {
+      print(message.documentID);
+      // print("data ${message.data}");
+      CategoryModel productModel = CategoryModel();
+      productModel.id = message.documentID;
+      productModel.name = message.data[NAME] == null ? "" : message.data[NAME];
+      productModel.type = message.data[TYPE] == null ? "" : message.data[TYPE];
+      productModel.imageLocation =
+          message.data[PICTURE] == null ? "" : message.data[PICTURE];
+      productModel.quantity =
+          message.data[QUANTITY] == null ? "" : message.data[QUANTITY];
+
+      //print(productModel.name);
+      productList.add(productModel);
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // List<CategoryModel> listItems = getData();
+
     return Container(
-        child: StreamBuilder<QuerySnapshot>(
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: Text('No data available'),
-          );
-        }
-        final messages = snapshot.data.documents;
-        List<CategoryModel> productList = [];
-        for (var message in messages) {
-          // print("data ${message.data}");
-          CategoryModel productModel = CategoryModel();
-          productModel.id = message.documentID;
-          productModel.name =
-              message.data[NAME] == null ? "" : message.data[NAME];
-          productModel.type =
-              message.data[TYPE] == null ? "" : message.data[TYPE];
-          productModel.imageLocation =
-              message.data[PICTURE] == null ? "" : message.data[PICTURE];
-          productModel.quantity =
-              message.data[QUANTITY] == null ? "" : message.data[QUANTITY];
-
-          //print(productModel.name);
-          productList.add(productModel);
-          // print(productModel);
-        }
-
-        return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: productList.length,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext cntxt, int index) {
-              return ListItem(
-                imageLocation: productList[index].imageLocation,
-                title: productList[index].name,
-                quantity: productList[index].quantity,
-                type: productList[index].type,
-              );
-            });
-      },
-      stream: fireStore.collection(CATEGORIES).snapshots(),
-    ));
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: productList.length,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext cntxt, int index) {
+            return ListItem(
+              imageLocation: productList[index].imageLocation,
+              title: productList[index].name,
+              quantity: productList[index].quantity,
+              type: productList[index].type,
+            );
+          }),
+    );
   }
 }
 

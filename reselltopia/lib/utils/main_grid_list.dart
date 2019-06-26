@@ -91,6 +91,7 @@ class _MainGridListState extends State<MainGridList> {
 
   @override
   Widget build(BuildContext context) {
+    print("repeat");
     if (widget.searchText.length > 0) {
       handleSearch(widget.searchText);
     } else {
