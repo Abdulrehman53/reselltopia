@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:reselltopia/contants.dart';
 import 'package:reselltopia/models/productsModel.dart';
-import 'package:reselltopia/pages/product_detail.dart';
 
 class GridList extends StatefulWidget {
   String searchText = "";
@@ -112,12 +111,12 @@ class SingleProduct extends StatelessWidget {
       height: 200.0,
       child: InkWell(
         onTap: () {
-          Navigator.push(
+          /* Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => ProductDetail(
                         productModel: productModel,
-                      )));
+                      )));*/
         },
         child: Card(
           child: Material(

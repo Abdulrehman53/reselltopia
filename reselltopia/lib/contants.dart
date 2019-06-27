@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final String latest = 'Home';
-final String favourits = 'My Favouites';
+final String favourits = 'My Favorites';
 final String saved = 'My Saved';
 final String categories = 'Categories';
 final String about = 'About Us';

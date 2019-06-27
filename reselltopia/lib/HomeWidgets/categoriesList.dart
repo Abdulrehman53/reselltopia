@@ -38,7 +38,7 @@ class _CategoriesListState extends State<CategoriesList> {
               message.data[QUANTITY] == null ? "" : message.data[QUANTITY];
 
           //print(productModel.name);
-          //productList.add(productModel);
+          productList.add(productModel);
           // print(productModel);
         }
 

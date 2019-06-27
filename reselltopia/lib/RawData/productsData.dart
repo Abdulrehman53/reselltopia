@@ -1,6 +1,6 @@
 import 'package:reselltopia/models/productsModel.dart';
 
-List<ProductModel> getData() {
+List<ProductModel> getProductData() {
   List<ProductModel> listItems = [];
   listItems.add(new ProductModel(
       name: 'Dress',

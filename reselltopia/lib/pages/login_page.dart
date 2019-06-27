@@ -63,27 +63,31 @@ class _LoginPageState extends State<LoginPage> {
                   width: 280.0,
                   height: 240.0,
                 )),
-
+            Padding(
+              padding: const EdgeInsets.only(top: 200),
+              child: SizedBox(
+                width: double.infinity,
+                height: 160.0,
+                child: Text(
+                  'Reselltopia',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 50.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic),
+                  textAlign: TextAlign.center,
+                  // or Alignment.topLeft
+                ),
+              ),
+            ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 220.0),
+                padding: const EdgeInsets.only(top: 270.0),
                 child: Center(
                   child: Form(
                       key: _formKey,
                       child: ListView(
                         children: <Widget>[
-                          Center(
-                            child: Text(
-                              'Reselltopia',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 50.0,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FontStyle.italic),
-                              textAlign: TextAlign.start,
-                              // or Alignment.topLeft
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Padding(
@@ -258,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
                                         TextSpan(
                                             style: TextStyle(fontSize: 16.0),
                                             text:
-                                                "Don't have an accout? click here to"),
+                                                "Don't have an account? Click here to"),
                                         TextSpan(
                                             text: " sign up!",
                                             style: TextStyle(

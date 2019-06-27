@@ -9,7 +9,7 @@ class GridList extends StatefulWidget {
 }
 
 class _GridListState extends State<GridList> {
-  List<ProductModel> productList = getData();
+  List<ProductModel> productList = getProductData();
   @override
   Widget build(BuildContext context) {
     return Container(
