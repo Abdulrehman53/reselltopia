@@ -1,12 +1,14 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:reselltopia/contants.dart';
 import 'package:reselltopia/models/UserModel.dart';
@@ -34,33 +36,56 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _passwordTextController = TextEditingController();
   User user = User();
   File _image;
+  String picture;
 
-  String _path;
-  Map<String, String> _paths;
-  String _extension;
-  bool _multiPick = false;
-  bool _hasValidMime = false;
-  FileType _pickingType = FileType.IMAGE;
-  String _fileName;
-  void _openFileExplorer() async {
-    if (_pickingType != FileType.CUSTOM || _hasValidMime) {
-      try {
-        _paths = null;
-        _path = await FilePicker.getFilePath(
-            type: _pickingType, fileExtension: _extension);
-      } on PlatformException catch (e) {
-        print("Unsupported operation" + e.toString());
-      }
-      if (!mounted) return;
-
-      setState(() {
-        _image = File(_path);
-        _fileName = _path != null
-            ? _path.split('/').last
-            : _paths != null ? _paths.keys.toString() : '...';
-      });
+  void _pickSaveImage(String userId) async {
+    if (_image != null) {
+      final String fileName = Random().nextInt(10000).toString() + '.png';
+      final StorageReference storageRef =
+          FirebaseStorage.instance.ref().child(fileName);
+      final StorageUploadTask uploadTask = storageRef.putFile(
+        File(_image.path),
+        StorageMetadata(
+          contentType: 'image' + '/' + '.png',
+        ),
+      );
+      picture = await (await uploadTask.onComplete).ref.getDownloadURL();
     }
+    await sharedPreferences.setString(id, userId);
+    _firestoreInstance.collection(USER_KEY).document(userId).setData({
+      EMAIL: email,
+      FULL_NAME: fullName,
+      PHONE: mobile,
+      USER_ID: userId,
+      PICTURE: picture,
+    });
   }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = image;
+    });
+  }
+  /* Future<void> retrieveLostData() async {
+    final RetrieveLostDataResponse response =
+    await ImagePicker.retrieveLostData();
+    if (response == null) {
+      return;
+    }
+    if (response.file != null) {
+      setState(() {
+        if (response.type == RetrieveType.video) {
+          _handleVideo(response.file);
+        } else {
+          _handleImage(response.file);
+        }
+      });
+    } else {
+      _handleError(response.exception);
+    }
+  }*/
 
   @override
   void initState() {
@@ -103,46 +128,95 @@ class _SignUpPageState extends State<SignUpPage> {
               height: double.infinity,
             ),
 
-            Container(
-                alignment: Alignment.topCenter,
-                child: Image.asset(
-                  'images/lg.png',
-                  width: 280.0,
-                  height: 240.0,
-                )),
+            Padding(
+              padding: const EdgeInsets.only(top: 50),
+              child: SizedBox(
+                width: double.infinity,
+                height: 100.0,
+                child: Container(
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {
+                        getImage();
+                      },
+                      child: Container(
+                          height: 100.0,
+                          width: 100.0,
+                          child: Container(
+                              alignment: Alignment.center,
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: _image == null
+                                        ? AssetImage(
+                                            'images/signup_page_9_profile.png',
+                                          )
+                                        : FileImage(
+                                            _image,
+                                          ),
+                                  )))),
+                    ),
+                  ),
+                ),
+              ),
+            ),
 
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 40.0),
+                padding: const EdgeInsets.only(top: 140.0),
                 child: Center(
                   child: Form(
                       key: _formKey,
                       child: ListView(
                         children: <Widget>[
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 130, right: 130),
-                            child: InkWell(
-                              onTap: () {
-                                //print("image");
-                                //getImage();
-                                _openFileExplorer();
-                              },
-                              child: new Container(
-                                width: 120.0,
-                                height: 150.0,
+                          /*InkWell(
+                            onTap: () {
+                              //print("image");
+                              //getImage();
+                              getImage();
+                            },
+                            child: new Container(
+                                width: 190.0,
+                                height: 190.0,
                                 decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
                                       fit: BoxFit.fill,
-                                      image: _image == null
-                                          ? new AssetImage(
-                                              'images/signup_page_9_profile.png')
-                                          : new FileImage(_image)),
-                                ),
+                                      image:
+                                          new AssetImage('images/chris.png'),
+                                    ))),
+
+                            */ /*new CircleAvatar(
+                                radius: 20.0,
+                                child: _image == null
+                                    ? Image.asset(
+                                        'images/signup_page_9_profile.png',
+                                        height: 100.0,
+                                        width: 100.0,
+                                      )
+                                    : Image.file(
+                                        _image,
+                                        height: 100.0,
+                                        width: 100.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                              )*/ /*
+                            */ /*new Container(
+                              width: 120.0,
+                              height: 150.0,
+                              alignment: Alignment.center,
+                              decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                    fit: BoxFit.fitHeight,
+                                    image: _image == null
+                                        ? new AssetImage(
+                                            'images/signup_page_9_profile.png')
+                                        : new FileImage(_image)),
                               ),
-                            ),
-                          ),
+                            ),*/ /*
+                          ),*/
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Padding(
@@ -352,19 +426,10 @@ class _SignUpPageState extends State<SignUpPage> {
                                                 password: password);
 
                                         if (newUser != null) {
+                                          _pickSaveImage(newUser.uid);
                                           Fluttertoast.showToast(
                                               msg: 'Sign up Successfully');
-                                          await sharedPreferences.setString(
-                                              id, newUser.uid);
-                                          _firestoreInstance
-                                              .collection(USER_KEY)
-                                              .document(newUser.uid)
-                                              .setData({
-                                            EMAIL: email,
-                                            FULL_NAME: fullName,
-                                            PHONE: mobile,
-                                            USER_ID: newUser.uid,
-                                          });
+
                                           Navigator.pushReplacement(
                                               context,
                                               MaterialPageRoute(

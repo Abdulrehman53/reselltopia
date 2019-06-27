@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String fullName, email;
+  String fullName, email, picture;
   final firestore = Firestore.instance;
   final firebaseAuth = FirebaseAuth.instance;
   SharedPreferences sharedPreferences;
@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
       for (var document in userList) {
         email = document.data[EMAIL].toString();
         fullName = document.data[FULL_NAME].toString();
+        picture = document.data[PICTURE].toString();
         //print(email);
         //print(fullName);
       }
@@ -82,7 +83,13 @@ class _HomePageState extends State<HomePage> {
                         shape: BoxShape.circle,
                         image: new DecorationImage(
                           fit: BoxFit.fill,
-                          image: new AssetImage('images/chris.png'),
+                          image: picture == null
+                              ? AssetImage(
+                                  'images/signup_page_9_profile.png',
+                                )
+                              : NetworkImage(
+                                  picture,
+                                ),
                         ))),
               ),
               decoration: new BoxDecoration(color: APP_COLOR),
